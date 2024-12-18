@@ -6,6 +6,16 @@ The project is split into two parts:
 1. Frontend - Angular web application built with Ionic Framework
 2. Backend RESTful API - Node-Express application
 
+## Good To Know:
+1. Needed to set the env set NODE_OPTIONS=--openssl-legacy-provider inside the front end app in order get it build
+2. Needed to change the dialect type of the api app. ```  'dialectOptions': {
+    'ssl': {
+      'require': true, // This will help you. But you will see nwe error
+      'rejectUnauthorized': false // This line will fix new error
+    }
+  },```
+   
+
 ## Getting Started
 > _tip_: it's recommended that you start with getting the backend API running since the frontend web application depends on the API.
 
