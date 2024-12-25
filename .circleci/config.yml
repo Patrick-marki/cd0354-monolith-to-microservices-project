@@ -1,0 +1,46 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: circleci/node:14
+    environment:
+      BACKEND_FEED: udagram-api-feed
+      BACKEND_USER: udagram-api-user
+      FRONTEND: udagram-frontend
+      REVERSEPROXY: reverseproxy
+    steps:
+      - setup_remote_docker:
+          version: 20.10.7
+      - checkout
+      - run:
+          name: Set TAG
+          command: |
+            if [ "$CIRCLE_BRANCH" == "main" ]; then
+              echo "export TAG=latest-$CIRCLE_BUILD_NUM" >> $BASH_ENV
+            else
+              echo "export TAG=$CIRCLE_BRANCH-$CIRCLE_BUILD_NUM" >> $BASH_ENV
+            fi
+      - run:
+          name: Build and Tag Docker Images
+          command: |
+            docker build -t $BACKEND_FEED ./udagram-api-feed && docker tag $BACKEND_FEED $DOCKER_USERNAME/$BACKEND_FEED:$TAG
+            docker build -t $BACKEND_USER ./udagram-api-user && docker tag $BACKEND_USER $DOCKER_USERNAME/$BACKEND_USER:$TAG
+            docker build -t $FRONTEND ./udagram-frontend && docker tag $FRONTEND $DOCKER_USERNAME/$FRONTEND:$TAG
+            docker build -t $REVERSEPROXY ./reverseproxy && docker tag $REVERSEPROXY $DOCKER_USERNAME/$REVERSEPROXY:$TAG
+      - run:
+          name: Docker Login
+          command: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      - run:
+          name: Push Docker Images
+          command: |
+            docker push $DOCKER_USERNAME/$BACKEND_FEED:$TAG
+            docker push $DOCKER_USERNAME/$BACKEND_USER:$TAG
+            docker push $DOCKER_USERNAME/$FRONTEND:$TAG
+            docker push $DOCKER_USERNAME/$REVERSEPROXY:$TAG
+
+workflows:
+  version: 2
+  build_and_push:
+    jobs:
+      - build
