@@ -1,0 +1,23 @@
+services:
+  - docker
+
+env:
+  global:
+    - BACKEND_FEED=udagram-api-feed
+    - BACKEND_USER=udagram-api-user
+    - FRONTEND=udagram-frontend
+    - REVERSEPROXY=reverseproxy
+
+script:
+  - export TAG=$(if [ "$TRAVIS_BRANCH" == "main" ]; then echo "latest-$TRAVIS_BUILD_NUMBER"; else echo $TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER ; fi)
+  - docker build -t $BACKEND_FEED ./udagram-api-feed && docker tag $BACKEND_FEED $DOCKER_USERNAME/$BACKEND_FEED:$TAG
+  - docker build -t $BACKEND_USER ./udagram-api-user && docker tag $BACKEND_USER $DOCKER_USERNAME/$BACKEND_USER:$TAG
+  - docker build -t $FRONTEND ./udagram-frontend && docker tag $FRONTEND $DOCKER_USERNAME/$FRONTEND:$TAG
+  - docker build -t $REVERSEPROXY ./reverseproxy && docker tag $REVERSEPROXY $DOCKER_USERNAME/$REVERSEPROXY:$TAG
+
+after_success:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push $DOCKER_USERNAME/$BACKEND_FEED:$TAG
+  - docker push $DOCKER_USERNAME/$BACKEND_USER:$TAG
+  - docker push $DOCKER_USERNAME/$FRONTEND:$TAG
+  - docker push $DOCKER_USERNAME/$REVERSEPROXY:$TAG
