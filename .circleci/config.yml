@@ -10,6 +10,7 @@ jobs:
       FRONTEND: udagram-frontend
       REVERSEPROXY: reverseproxy
     steps:
+      - setup_remote_docker
       - checkout
       - run:
           name: Set TAG
