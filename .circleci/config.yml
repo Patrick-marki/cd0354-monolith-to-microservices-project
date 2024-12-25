@@ -8,7 +8,7 @@ jobs:
       BACKEND_FEED: udagram-api-feed
       BACKEND_USER: udagram-api-user
       FRONTEND: udagram-frontend
-      REVERSEPROXY: reverseproxy
+      REVERSEPROXY: udagram-reverseproxy
     steps:
       - setup_remote_docker
       - checkout
