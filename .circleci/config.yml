@@ -21,6 +21,13 @@ jobs:
               echo "export TAG=$CIRCLE_BRANCH-$CIRCLE_BUILD_NUM" >> $BASH_ENV
             fi
       - run:
+          name: Build Frontend
+          command: |
+            cd udagram-frontend
+            npm install
+            npm run build --prod
+            cd ..
+      - run:
           name: Build and Tag Docker Images
           command: |
             docker build -t $BACKEND_FEED ./$BACKEND_FEED && docker tag $BACKEND_FEED $DOCKER_USERNAME/$BACKEND_FEED:$TAG
