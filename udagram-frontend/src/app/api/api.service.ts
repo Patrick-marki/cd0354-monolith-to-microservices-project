@@ -3,8 +3,7 @@ import { HttpClient, HttpHeaders, HttpRequest, HttpEvent } from '@angular/common
 import { environment } from '../../environments/environment';
 import { map } from 'rxjs/operators';
 
-// Get API_HOST from environment variable or fallback to environment configuration
-const API_HOST = process.env.API_HOST || environment.apiHost;
+const API_HOST = environment.apiHost;
 
 @Injectable({
   providedIn: 'root'
