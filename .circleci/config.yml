@@ -16,9 +16,9 @@ jobs:
           name: Set TAG
           command: |
             if [ "$CIRCLE_BRANCH" == "main" ]; then
-              echo "export TAG=latest-$CIRCLE_BUILD_NUM" >> $BASH_ENV
+              echo "export TAG=latest-2_$CIRCLE_BUILD_NUM" >> $BASH_ENV
             else
-              echo "export TAG=$CIRCLE_BRANCH-$CIRCLE_BUILD_NUM" >> $BASH_ENV
+              echo "export TAG=$CIRCLE_BRANCH-2_$CIRCLE_BUILD_NUM" >> $BASH_ENV
             fi
       - run:
           name: Build and Tag Docker Images
