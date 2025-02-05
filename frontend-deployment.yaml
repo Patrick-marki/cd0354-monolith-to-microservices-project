@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: cancan475/udagram-frontend:latest-14
+        image: cancan475/udagram-frontend:latest-2_2
         ports:
         - containerPort: 80
         envFrom:

@@ -33,3 +33,8 @@ spec:
             secretKeyRef:
               name: aws-secret
               key: aws_secret_access_key
+        resources:
+          requests:
+            cpu: "250m"
+          limits:
+            cpu: "500m"
